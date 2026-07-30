@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Football Manager - European Edition</title>
+  <title>RM Manager - European Edition</title>
   <style>
     :root {
       --bg-dark: #0f172a;
@@ -14,195 +14,118 @@
       --danger: #ef4444;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text); padding: 20px; }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text);
-      padding: 20px;
-    }
+    header { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--panel-bg); }
+    header h1 { color: var(--accent); font-size: 2.2rem; letter-spacing: 1px; }
 
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--panel-bg);
-    }
+    .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
 
-    header h1 {
-      color: var(--accent);
-      font-size: 2rem;
-    }
+    .panel { background: var(--panel-bg); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); margin-bottom: 20px; }
+    h2 { margin-bottom: 15px; font-size: 1.2rem; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+    .btn { background-color: var(--accent); color: #000; border: none; padding: 8px 14px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-danger { background-color: var(--danger); color: #fff; }
+    .btn-large { width: 100%; padding: 15px; font-size: 1.1rem; background: linear-gradient(135deg, #38bdf8, #818cf8); color: #fff; margin-bottom: 20px; }
 
-    @media (max-width: 768px) {
-      .container { grid-template-columns: 1fr; }
-    }
+    select, input { padding: 8px; border-radius: 6px; background: #0f172a; color: #fff; border: 1px solid #334155; width: 100%; margin-bottom: 10px; }
 
-    .panel {
-      background: var(--panel-bg);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+    th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #334155; }
+    th { background-color: #0f172a; color: #94a3b8; }
 
-    h2 {
-      margin-bottom: 15px;
-      font-size: 1.2rem;
-      color: var(--accent);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+    .badge-user { background: #0284c7; color: #fff; }
 
-    .btn {
-      background-color: var(--accent);
-      color: #000;
-      border: none;
-      padding: 10px 18px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .btn-large {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #38bdf8, #818cf8);
-      color: #fff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
-
-    th, td {
-      padding: 8px 10px;
-      text-align: left;
-      border-bottom: 1px solid #334155;
-    }
-
-    th {
-      background-color: #0f172a;
-      color: #94a3b8;
-    }
-
-    .results-list {
-      max-height: 250px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .match-item {
-      background: #0f172a;
-      padding: 8px 12px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.95rem;
-    }
-
-    .score {
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    .badge {
-      background: #334155;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-    }
-
-    .badge-ucl { background: #1e3a8a; color: #93c5fd; }
-    .badge-uel { background: #7c2d12; color: #fdba74; }
-    .badge-uecl { background: #14532d; color: #86efac; }
+    /* Modal / Seçim Ekranı */
+    #selectionScreen { display: block; }
+    #gameScreen { display: none; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>⚽ AI Football Manager</h1>
-    <p>Liqalar və Avropa Kubokları Simulyatoru</p>
+    <h1>⚽ RM MANAGER</h1>
+    <p>Ultimate Football Management Experience</p>
   </header>
 
-  <div class="container">
+  <!-- 1. KOMANDA SEÇİM EKRANI -->
+  <div id="selectionScreen" class="panel" style="max-width: 500px; margin: 40px auto;">
+    <h2>Karyeraya Başla</h2>
+    <p style="margin-bottom: 15px; color: #94a3b8; font-size: 0.9rem;">İdarə etmək istədiyiniz komandanı seçin:</p>
     
-    <!-- SOL TƏRƏF: İdarəetmə və Nəticələr -->
-    <div class="left-col">
-      <button class="btn btn-large" onclick="playNextRound()">▶ Növbəti Tur və Avrokubokları Oyna</button>
+    <label>Ölkə:</label>
+    <select id="selectCountry" onchange="updateTeamDropdown()">
+      <option value="AZ">Azərbaycan</option>
+      <option value="TR">Türkiyə</option>
+      <option value="ENG">İngiltərə</option>
+    </select>
 
-      <div class="panel" style="margin-bottom: 20px;">
-        <h2>Son Turun Matç Nəticələri</h2>
-        <div id="matchResults" class="results-list">
-          <p style="color: #64748b;">Hələ matç oynanılmayıb...</p>
+    <label>Komanda:</label>
+    <select id="selectTeam"></select>
+
+    <button class="btn btn-large" style="margin-top: 15px;" onclick="startGame()">Karyeraya Başla ▶</button>
+  </div>
+
+  <!-- 2. ƏSAS OYUN EKRANI -->
+  <div id="gameScreen">
+    <button class="btn btn-large" onclick="playNextRound()">▶ Növbəti Tur və Avrokubokları Oyna</button>
+
+    <div class="container">
+      
+      <!-- SOL SÜTUN: Klub Bilgisi və Transferlər -->
+      <div>
+        <div class="panel">
+          <h2>
+            <span id="userTeamName">Komandam</span>
+            <span id="userBudget" style="color: var(--success); font-weight: bold;">$0M</span>
+          </h2>
+          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Heyətinizdəki Oyunçular:</p>
+          <table>
+            <thead>
+              <tr><th>Ad</th><th>Möq</th><th>OVR</th><th>Dəyər</th><th>Əməl</th></tr>
+            </thead>
+            <tbody id="userSquadTable"></tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <h2>🛒 Transfer Bazarı</h2>
+          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 10px;">Digər klublardan oyunçu al:</p>
+          <table>
+            <thead>
+              <tr><th>Ad</th><th>Klub</th><th>OVR</th><th>Qiymət</th><th>Əməl</th></tr>
+            </thead>
+            <tbody id="transferMarketTable"></tbody>
+          </table>
         </div>
       </div>
 
-      <div class="panel">
-        <h2>🏆 Avropa Turnirləri <span class="badge badge-ucl">UEFA</span></h2>
-        <div id="euroResults" class="results-list">
-          <p style="color: #64748b;">Avrokubok matçları liqa turlarından sonra keçirilir...</p>
+      <!-- SAĞ SÜTUN: Cədvəl və Matç Nəticələri -->
+      <div>
+        <div class="panel">
+          <h2>
+            <span>Liqa Cədvəli</span>
+            <span id="currentLeagueName" class="badge badge-user"></span>
+          </h2>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Klub</th><th>O</th><th>Q</th><th>H</th><th>M</th><th>X</th></tr>
+            </thead>
+            <tbody id="leagueStandingsTable"></tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <h2>Son Matç Nəticələri</h2>
+          <div id="matchResults" style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;"></div>
         </div>
       </div>
-    </div>
 
-    <!-- SAĞ TƏRƏF: Liqa Cədvəlləri -->
-    <div class="right-col">
-      <div class="panel">
-        <h2>
-          <span>Liqa Cədvəli</span>
-          <select id="leagueSelect" onchange="renderStandings()" style="padding: 5px; border-radius: 4px; background: #0f172a; color: #fff; border: 1px solid #334155;">
-            <option value="AZ">Azərbaycan Premyer Liqası</option>
-            <option value="TR">Türkiyə Süper Lig</option>
-            <option value="ENG">İngiltərə Premier League</option>
-          </select>
-        </h2>
-        
-        <table id="standingsTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Klub</th>
-              <th>O</th>
-              <th>Q</th>
-              <th>H</th>
-              <th>M</th>
-              <th>X</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Cədvəl JS ilə dolacaq -->
-          </tbody>
-        </table>
-      </div>
     </div>
-
   </div>
 
   <script>
@@ -210,149 +133,231 @@
     const db = {
       countries: [
         {
-          id: "AZ",
-          name: "Azərbaycan",
+          id: "AZ", name: "Azərbaycan", league: "Premyer Liqa",
           teams: [
-            { id: 101, name: "Qarabağ", rating: 78, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 102, name: "Neftçi", rating: 72, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 103, name: "Sabah", rating: 74, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 104, name: "Zirə", rating: 70, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+            { id: 101, name: "Qarabağ", budget: 15, rating: 78, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Kady Borges", pos: "CAM", rating: 79, value: 4.5 },
+                { name: "Abdellah Zoubir", pos: "LW", rating: 77, value: 2.0 },
+                { name: "Nəriman Axundzadə", pos: "ST", rating: 73, value: 1.5 }
+              ]
+            },
+            { id: 102, name: "Neftçi", budget: 8, rating: 72, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Emin Mahmudov", pos: "CM", rating: 74, value: 1.2 },
+                { name: "Rza Cəfərov", pos: "GK", rating: 70, value: 0.8 }
+              ]
+            },
+            { id: 103, name: "Sabah", budget: 10, rating: 74, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Vincent Thill", pos: "RW", rating: 75, value: 2.2 }
+              ]
+            }
           ]
         },
         {
-          id: "TR",
-          name: "Türkiyə",
+          id: "TR", name: "Türkiyə", league: "Süper Lig",
           teams: [
-            { id: 201, name: "Galatasaray", rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 202, name: "Fenerbahçe", rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 203, name: "Beşiktaş", rating: 79, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 204, name: "Trabzonspor", rating: 75, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+            { id: 201, name: "Beşiktaş", budget: 35, rating: 79, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Rafa Silva", pos: "CAM", rating: 82, value: 12.0 },
+                { name: "Ciro Immobile", pos: "ST", rating: 81, value: 8.0 },
+                { name: "Gedson Fernandes", pos: "CM", rating: 79, value: 15.0 }
+              ]
+            },
+            { id: 202, name: "Galatasaray", budget: 50, rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Victor Osimhen", pos: "ST", rating: 87, value: 75.0 },
+                { name: "Barış Alper Yılmaz", pos: "RW", rating: 79, value: 20.0 }
+              ]
+            },
+            { id: 203, name: "Fenerbahçe", budget: 45, rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Youssef En-Nesyri", pos: "ST", rating: 81, value: 22.0 }
+              ]
+            }
           ]
         },
         {
-          id: "ENG",
-          name: "İngiltərə",
+          id: "ENG", name: "İngiltərə", league: "Premier League",
           teams: [
-            { id: 301, name: "Man. City", rating: 88, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 302, name: "Arsenal", rating: 85, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 303, name: "Liverpool", rating: 86, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
-            { id: 304, name: "Chelsea", rating: 82, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+            { id: 301, name: "Arsenal", budget: 120, rating: 85, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Bukayo Saka", pos: "RW", rating: 87, value: 130.0 },
+                { name: "Martin Ødegaard", pos: "CAM", rating: 86, value: 90.0 }
+              ]
+            },
+            { id: 302, name: "Man. City", budget: 150, rating: 88, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0,
+              players: [
+                { name: "Erling Haaland", pos: "ST", rating: 91, value: 180.0 }
+              ]
+            }
           ]
         }
       ]
     };
 
-    // --- MATÇ SİMULYASİYA MÜHƏRRİKİ ---
-    function simulateMatch(home, away) {
-      const homePower = home.rating + 3; // Ev sahibi üstünlüyü
-      const awayPower = away.rating;
+    let userTeam = null;
+    let userCountry = null;
 
-      let homeGoals = 0;
-      let awayGoals = 0;
-
-      for (let i = 0; i < 7; i++) {
-        if (Math.random() * 100 < (homePower / (homePower + awayPower)) * 45) homeGoals++;
-        if (Math.random() * 100 < (awayPower / (homePower + awayPower)) * 40) awayGoals++;
-      }
-
-      // Statistikanı yenilə
-      home.played++; away.played++;
-      home.gf += homeGoals; home.ga += awayGoals;
-      away.gf += awayGoals; away.ga += homeGoals;
-
-      if (homeGoals > awayGoals) {
-        home.points += 3; home.won++; away.lost++;
-      } else if (awayGoals > homeGoals) {
-        away.points += 3; away.won++; home.lost++;
-      } else {
-        home.points += 1; away.points += 1;
-        home.drawn++; away.drawn++;
-      }
-
-      return { home: home.name, away: away.name, score: `${homeGoals} - ${awayGoals}` };
+    // Seçim menyusunu yenilə
+    function updateTeamDropdown() {
+      const cId = document.getElementById("selectCountry").value;
+      const country = db.countries.find(c => c.id === cId);
+      const teamSelect = document.getElementById("selectTeam");
+      teamSelect.innerHTML = "";
+      country.teams.forEach(t => {
+        teamSelect.innerHTML += `<option value="${t.id}">${t.name} (Büdcə: $${t.budget}M)</option>`;
+      });
     }
 
-    // --- OYUN MƏNTİQİ ---
-    function playNextRound() {
-      const matchResultsContainer = document.getElementById("matchResults");
-      const euroResultsContainer = document.getElementById("euroResults");
-      
-      matchResultsContainer.innerHTML = "";
-      euroResultsContainer.innerHTML = "";
+    // Oyunu Başlat
+    function startGame() {
+      const cId = document.getElementById("selectCountry").value;
+      const tId = parseInt(document.getElementById("selectTeam").value);
 
-      // 1. Daxili Liqa Matçlarını Oyna
-      db.countries.forEach(country => {
-        const teams = country.teams;
-        // Sadə tütlaşdırma (1v2, 3v4)
-        const res1 = simulateMatch(teams[0], teams[1]);
-        const res2 = simulateMatch(teams[2], teams[3]);
+      userCountry = db.countries.find(c => c.id === cId);
+      userTeam = userCountry.teams.find(t => t.id === tId);
 
-        matchResultsContainer.innerHTML += `
-          <div class="match-item">
-            <span><b>[${country.name}]</b> ${res1.home} - ${res1.away}</span>
-            <span class="score">${res1.score}</span>
-          </div>
-          <div class="match-item">
-            <span><b>[${country.name}]</b> ${res2.home} - ${res2.away}</span>
-            <span class="score">${res2.score}</span>
-          </div>
+      document.getElementById("selectionScreen").style.display = "none";
+      document.getElementById("gameScreen").style.display = "block";
+
+      document.getElementById("userTeamName").innerText = userTeam.name;
+      document.getElementById("currentLeagueName").innerText = userCountry.league;
+
+      updateUI();
+    }
+
+    function updateUI() {
+      // Büdcə
+      document.getElementById("userBudget").innerText = `$${userTeam.budget.toFixed(1)}M`;
+
+      // Oyunçularım
+      const squadTbody = document.getElementById("userSquadTable");
+      squadTbody.innerHTML = "";
+      userTeam.players.forEach((p, idx) => {
+        squadTbody.innerHTML += `
+          <tr>
+            <td><b>${p.name}</b></td>
+            <td>${p.pos}</td>
+            <td>${p.rating}</td>
+            <td>$${p.value}M</td>
+            <td><button class="btn btn-danger" onclick="sellPlayer(${idx})">Sat</button></td>
+          </tr>
         `;
       });
 
-      // 2. Avrokubok Matçları (Çempionlar Liqası, Avropa Liqası, Konfrans Liqası)
-      const uclMatch = simulateMatch(db.countries[0].teams[0], db.countries[1].teams[0]); // Qarabağ vs Galatasaray (UCL)
-      const uelMatch = simulateMatch(db.countries[0].teams[1], db.countries[2].teams[1]); // Neftçi vs Arsenal (UEL)
-      const ueclMatch = simulateMatch(db.countries[1].teams[2], db.countries[2].teams[3]); // Beşiktaş vs Chelsea (UECL)
+      // Transfer Bazarı (Başqa komandaların oyunçuları)
+      const marketTbody = document.getElementById("transferMarketTable");
+      marketTbody.innerHTML = "";
+      db.countries.forEach(c => {
+        c.teams.forEach(t => {
+          if (t.id !== userTeam.id) {
+            t.players.forEach((p, pIdx) => {
+              marketTbody.innerHTML += `
+                <tr>
+                  <td><b>${p.name}</b></td>
+                  <td>${t.name}</td>
+                  <td>${p.rating}</td>
+                  <td>$${p.value}M</td>
+                  <td><button class="btn" onclick="buyPlayer(${t.id}, ${pIdx})">Al</button></td>
+                </tr>
+              `;
+            });
+          }
+        });
+      });
 
-      euroResultsContainer.innerHTML = `
-        <div class="match-item">
-          <span><span class="badge badge-ucl">UCL</span> ${uclMatch.home} - ${uclMatch.away}</span>
-          <span class="score">${uclMatch.score}</span>
-        </div>
-        <div class="match-item">
-          <span><span class="badge badge-uel">UEL</span> ${uelMatch.home} - ${uelMatch.away}</span>
-          <span class="score">${uelMatch.score}</span>
-        </div>
-        <div class="match-item">
-          <span><span class="badge badge-uecl">UECL</span> ${ueclMatch.home} - ${ueclMatch.away}</span>
-          <span class="score">${ueclMatch.score}</span>
-        </div>
-      `;
-
-      // Cədvəli yenilə
+      // Liqa Cədvəli
       renderStandings();
     }
 
-    // --- CƏDVƏLİ RENDER ETMƏK ---
-    function renderStandings() {
-      const selectedCountryId = document.getElementById("leagueSelect").value;
-      const country = db.countries.find(c => c.id === selectedCountryId);
-      const tbody = document.querySelector("#standingsTable tbody");
+    function sellPlayer(index) {
+      const player = userTeam.players[index];
+      userTeam.budget += player.value;
+      userTeam.players.splice(index, 1);
+      alert(`${player.name} $${player.value}M məbləğinə satıldı!`);
+      updateUI();
+    }
 
-      // Xala və top fərqinə görə sırala
-      const sortedTeams = [...country.teams].sort((a, b) => {
-        if (b.points !== a.points) return b.points - a.points;
-        return (b.gf - b.ga) - (a.gf - a.ga);
+    function buyPlayer(teamId, playerIndex) {
+      let sellerTeam = null;
+      db.countries.forEach(c => {
+        const found = c.teams.find(t => t.id === teamId);
+        if (found) sellerTeam = found;
       });
 
+      const player = sellerTeam.players[playerIndex];
+
+      if (userTeam.budget < player.value) {
+        alert("Büdcəniz bu transfer üçün kifayət etmir!");
+        return;
+      }
+
+      userTeam.budget -= player.value;
+      userTeam.players.push(player);
+      sellerTeam.players.splice(playerIndex, 1);
+
+      alert(`${player.name} komandanıza transfer olundu!`);
+      updateUI();
+    }
+
+    function simulateMatch(home, away) {
+      const homePower = home.rating + 3;
+      const awayPower = away.rating;
+      let hG = 0, aG = 0;
+
+      for (let i = 0; i < 6; i++) {
+        if (Math.random() * 100 < (homePower / (homePower + awayPower)) * 45) hG++;
+        if (Math.random() * 100 < (awayPower / (homePower + awayPower)) * 40) aG++;
+      }
+
+      home.played++; away.played++;
+      home.gf += hG; home.ga += aG; away.gf += aG; away.ga += hG;
+
+      if (hG > aG) { home.points += 3; home.won++; away.lost++; }
+      else if (aG > hG) { away.points += 3; away.won++; home.lost++; }
+      else { home.points += 1; away.points += 1; home.drawn++; away.drawn++; }
+
+      return { home: home.name, away: away.name, score: `${hG} - ${aG}` };
+    }
+
+    function playNextRound() {
+      const resultsDiv = document.getElementById("matchResults");
+      resultsDiv.innerHTML = "";
+
+      db.countries.forEach(c => {
+        if (c.teams.length >= 2) {
+          const res = simulateMatch(c.teams[0], c.teams[1]);
+          resultsDiv.innerHTML += `<div><b>[${c.name}]</b> ${res.home} ${res.score} ${res.away}</div>`;
+        }
+      });
+
+      renderStandings();
+    }
+
+    function renderStandings() {
+      const tbody = document.getElementById("leagueStandingsTable");
+      const sorted = [...userCountry.teams].sort((a,b) => b.points - a.points);
       tbody.innerHTML = "";
-      sortedTeams.forEach((team, index) => {
+      sorted.forEach((t, i) => {
+        const isUser = t.id === userTeam.id ? "style='background: #1e3a8a;'" : "";
         tbody.innerHTML += `
-          <tr>
-            <td>${index + 1}</td>
-            <td><b>${team.name}</b></td>
-            <td>${team.played}</td>
-            <td>${team.won}</td>
-            <td>${team.drawn}</td>
-            <td>${team.lost}</td>
-            <td><b>${team.points}</b></td>
+          <tr ${isUser}>
+            <td>${i+1}</td>
+            <td><b>${t.name}</b></td>
+            <td>${t.played}</td>
+            <td>${t.won}</td>
+            <td>${t.drawn}</td>
+            <td>${t.lost}</td>
+            <td><b>${t.points}</b></td>
           </tr>
         `;
       });
     }
 
-    // İlk açılışda cədvəli göstər
-    renderStandings();
+    // Səhifə yüklənəndə seçim siyahısını doldur
+    updateTeamDropdown();
   </script>
 </body>
 </html>
