@@ -3,60 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RM Manager - Pro Edition</title>
+  <title>RM Manager - Master Edition</title>
   <style>
     :root {
-      --bg-dark: #0b132b;
-      --panel-bg: #1c2541;
-      --accent: #48cae4;
-      --accent-bright: #00b4d8;
-      --text: #edf2f4;
-      --success: #38b000;
-      --danger: #d90429;
-      --pitch-green: #1e5631;
+      --bg-dark: #080d1a;
+      --panel-bg: rgba(23, 32, 54, 0.85);
+      --accent: #00f2fe;
+      --accent-bright: #4facfe;
+      --text: #ffffff;
+      --text-dim: #a0aec0;
+      --success: #00e676;
+      --danger: #ff1744;
+      --pitch-bg: #0f381e;
+      --theme-glow: #00f2fe;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text); padding: 20px; }
+    /* TURNİR MÖVZULARI (DYNAMIC THEMES) */
+    body.theme-ucl {
+      --bg-dark: #020514;
+      --panel-bg: rgba(10, 20, 50, 0.85);
+      --accent: #00d4ff;
+      --theme-glow: #0051ff;
+      background: radial-gradient(circle at top, #081b4b 0%, #020514 100%) !important;
+    }
+    body.theme-uel {
+      --bg-dark: #120902;
+      --panel-bg: rgba(35, 18, 5, 0.85);
+      --accent: #ff8c00;
+      --theme-glow: #ff4500;
+      background: radial-gradient(circle at top, #3a1c02 0%, #120902 100%) !important;
+    }
+    body.theme-uecl {
+      --bg-dark: #021208;
+      --panel-bg: rgba(5, 35, 15, 0.85);
+      --accent: #00ff66;
+      --theme-glow: #00b33c;
+      background: radial-gradient(circle at top, #033a16 0%, #021208 100%) !important;
+    }
 
-    header { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--panel-bg); }
-    header h1 { color: var(--accent); font-size: 2.2rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text); padding: 20px; transition: all 0.5s ease; min-height: 100vh; }
 
-    .container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+    header { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    header h1 { color: var(--accent); font-size: 2.2rem; text-shadow: 0 0 15px var(--theme-glow); letter-spacing: 1px; }
+
+    .theme-selector { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    .theme-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--accent); background: transparent; color: #fff; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.3s; }
+    .theme-btn:hover { background: var(--accent); color: #000; }
+
+    .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
     @media (max-width: 1024px) { .container { grid-template-columns: 1fr; } }
 
-    .panel { background: var(--panel-bg); border-radius: 10px; padding: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 15px; }
-    h2 { margin-bottom: 12px; font-size: 1.1rem; color: var(--accent); display: flex; justify-content: space-between; align-items: center; }
+    .panel { background: var(--panel-bg); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin-bottom: 15px; }
+    h2 { margin-bottom: 15px; font-size: 1.1rem; color: var(--accent); display: flex; justify-content: space-between; align-align: center; }
 
-    .btn { background-color: var(--accent); color: #000; border: none; padding: 6px 12px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-    .btn:hover { background-color: var(--accent-bright); color: #fff; }
-    .btn-danger { background-color: var(--danger); color: #fff; }
-    .btn-large { width: 100%; padding: 14px; font-size: 1.1rem; background: linear-gradient(135deg, #00b4d8, #7209b7); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    .btn { background: linear-gradient(135deg, var(--accent-bright), var(--accent)); color: #000; border: none; padding: 8px 14px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 10px var(--theme-glow); }
+    .btn-large { width: 100%; padding: 14px; font-size: 1.1rem; background: linear-gradient(135deg, #00f2fe, #4facfe); color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 15px; }
 
-    select, input { padding: 8px; border-radius: 6px; background: #0b132b; color: #fff; border: 1px solid #3a506b; width: 100%; margin-bottom: 10px; }
+    select, input { padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.15); width: 100%; margin-bottom: 10px; outline: none; }
 
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #3a506b; }
-    th { background-color: #0b132b; color: #8d99ae; }
-
-    .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-    .badge-ucl { background: #03045e; color: #caf0f8; }
+    th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    th { background-color: rgba(0,0,0,0.4); color: var(--text-dim); }
 
     /* TAKTİK MEYDANÇA */
-    .pitch { background: var(--pitch-green); border-radius: 8px; padding: 15px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid #a3b18a; margin-bottom: 15px; position: relative; }
+    .pitch { background: radial-gradient(circle, #1e5631 0%, #0f381e 100%); border-radius: 10px; padding: 15px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid rgba(255,255,255,0.2); margin-bottom: 15px; }
     .pitch-row { display: flex; justify-content: space-around; gap: 5px; }
-    .player-card { background: rgba(11, 19, 43, 0.85); border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; text-align: center; cursor: pointer; border: 1px solid var(--accent); transition: 0.2s; min-width: 80px; }
-    .player-card:hover { transform: scale(1.05); background: rgba(0, 180, 216, 0.9); color: #000; }
+    .player-card { background: rgba(8, 13, 26, 0.9); border-radius: 6px; padding: 8px; font-size: 0.75rem; text-align: center; cursor: pointer; border: 1px solid var(--accent); transition: 0.2s; min-width: 85px; }
+    .player-card:hover { transform: scale(1.08); background: var(--accent); color: #000; }
+    .player-card.selected { border: 2px solid #ff1744; background: rgba(255, 23, 68, 0.3); }
+
+    /* POPUP/OFFERS */
+    .offer-card { background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,0,0,0.8)); border: 1px solid #ffd700; border-radius: 8px; padding: 12px; margin-top: 10px; }
 
     #selectionScreen { display: block; max-width: 450px; margin: 40px auto; }
     #gameScreen { display: none; }
   </style>
 </head>
-<body>
+<body class="theme-ucl">
 
   <header>
     <h1>⚽ RM MANAGER</h1>
-    <p>Professional Football Strategy & Management</p>
+    <p style="font-size: 0.85rem; color: var(--text-dim);">Real-Time Football Management & Strategy</p>
+    
+    <div class="theme-selector">
+      <button class="theme-btn" onclick="setTheme('theme-ucl')">⭐ Champions League</button>
+      <button class="theme-btn" onclick="setTheme('theme-uel')">🟠 Europa League</button>
+      <button class="theme-btn" onclick="setTheme('theme-uecl')">🟢 Conference League</button>
+    </div>
   </header>
 
   <!-- 1. SEÇİM EKRANI -->
@@ -64,9 +99,9 @@
     <h2>Karyeraya Başla</h2>
     <label>Ölkə Seçin:</label>
     <select id="selectCountry" onchange="updateTeamDropdown()">
-      <option value="AZ">Azərbaycan (Rank 26)</option>
-      <option value="TR">Türkiyə (Rank 9)</option>
-      <option value="ENG">İngiltərə (Rank 1)</option>
+      <option value="AZ">Azərbaycan (Premyer Liqa)</option>
+      <option value="TR">Türkiyə (Süper Lig)</option>
+      <option value="ENG">İngiltərə (Premier League)</option>
     </select>
 
     <label>Komanda Seçin:</label>
@@ -80,29 +115,38 @@
     <button class="btn btn-large" onclick="playNextRound()">▶ Növbəti Haftanın Matçlarını Oyna (Mövsüm Simulyasiyası)</button>
 
     <div class="container">
-      <!-- SOL SÜTUN: Taktika və Heyət -->
+      <!-- SOL SÜTUN: Taktika, Heyət və Swap -->
       <div>
         <div class="panel">
           <h2>
-            <span>📋 İlk 11-lik (Sahədəki Oyunçunun üstünə klikləyib çıxar)</span>
+            <span>📋 İlk 11-lik (Dəyişmək üçün 2 oyunçu seçin)</span>
+            <small id="swapStatus" style="font-size:0.75rem; color:var(--accent);"></small>
           </h2>
 
           <div class="pitch" id="pitchDisplay"></div>
 
           <h3 style="font-size: 0.9rem; color: var(--accent); margin-bottom: 6px;">Ehtiyat Oyunçular (Substitutes)</h3>
-          <table>
-            <thead>
-              <tr><th>Ad</th><th>Möq</th><th>Yaş</th><th>OVR</th><th>POT</th><th>Əməl</th></tr>
-            </thead>
-            <tbody id="benchTable"></tbody>
-          </table>
+          <div style="max-height: 180px; overflow-y: auto;">
+            <table>
+              <thead>
+                <tr><th>Ad</th><th>Möq</th><th>OVR</th><th>Qol</th><th>Asist</th><th>Əməl</th></tr>
+              </thead>
+              <tbody id="benchTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- İŞ TƏKLİFLƏRİ BÖLMƏSİ -->
+        <div class="panel" id="offerPanel" style="display:none;">
+          <h2>📩 Yeni İş/Məşqçi Təklifi!</h2>
+          <div id="offerContent"></div>
         </div>
 
         <!-- TRANSFER BAZARI -->
         <div class="panel">
           <h2>🛒 Transfer Bazarı <span id="userBudget" style="color: var(--success);">$0M</span></h2>
           <input type="text" id="searchInput" placeholder="Oyunçu adı, klub və ya mövqe axtar..." onkeyup="filterMarket()">
-          <div style="max-height: 250px; overflow-y: auto;">
+          <div style="max-height: 220px; overflow-y: auto;">
             <table>
               <thead>
                 <tr><th>Ad</th><th>Klub</th><th>Möq</th><th>OVR</th><th>Qiymət</th><th>Əməl</th></tr>
@@ -113,12 +157,12 @@
         </div>
       </div>
 
-      <!-- SAĞ SÜTUN: Cədvəl və Nəticələr -->
+      <!-- SAĞ SÜTUN: Cədvəl, Statistika və Nəticələr -->
       <div>
         <div class="panel">
           <h2>
             <span>Liqa Cədvəli</span>
-            <span id="currentLeagueName" class="badge badge-ucl"></span>
+            <span id="currentLeagueName" style="color: var(--accent); font-size:0.85rem;"></span>
           </h2>
           <table>
             <thead>
@@ -128,123 +172,120 @@
           </table>
         </div>
 
+        <!-- BOMBARDİRLƏR VƏ ASİST KRALLIĞI -->
         <div class="panel">
-          <h2>⚽ Matç Nəticələri və Qollar</h2>
-          <div id="matchResults" style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto;"></div>
+          <h2>📊 Liqa Statistikası (Top Scorers & Assists)</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <h4 style="font-size:0.8rem; color:var(--accent); margin-bottom:5px;">⚽ Qollar</h4>
+              <tbody id="topScorersTable"></tbody>
+            </div>
+            <div>
+              <h4 style="font-size:0.8rem; color:var(--accent); margin-bottom:5px;">👟 Asistlər</h4>
+              <tbody id="topAssistsTable"></tbody>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>⚽ Matç Nəticələri</h2>
+          <div id="matchResults" style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto;"></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // BÜTÜN KOMANDALAR ÜÇÜN TAM 11-LİK VƏ EHTİYATLAR BAZASI
+    // BÜTÜN KOMANDALAR VƏ REAL HEYƏTLƏR BAZASI
     const db = {
       countries: [
         {
-          id: "AZ", name: "Azərbaycan", rank: 26, league: "Premyer Liqa",
+          id: "AZ", name: "Azərbaycan", league: "Premyer Liqa",
           teams: [
             { id: 101, name: "Qarabağ", budget: 12, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
               squad: [
-                { name: "S. Mahammadaliyev", pos: "GK", age: 30, rating: 73, potential: 73, value: 1.0, inStarting11: true },
-                { name: "M. Vesovic", pos: "RB", age: 32, rating: 73, potential: 73, value: 1.2, inStarting11: true },
-                { name: "B. Mustafazade", pos: "CB", age: 27, rating: 74, potential: 77, value: 1.8, inStarting11: true },
-                { name: "K. Medina", pos: "CB", age: 33, rating: 74, potential: 74, value: 1.0, inStarting11: true },
-                { name: "E. Cəfərquliyev", pos: "LB", age: 23, rating: 73, potential: 81, value: 2.2, inStarting11: true },
-                { name: "J. Romao", pos: "CDM", age: 26, rating: 75, potential: 78, value: 3.0, inStarting11: true },
-                { name: "M. Jankovic", pos: "CM", age: 28, rating: 75, potential: 76, value: 2.5, inStarting11: true },
-                { name: "Y. Benzia", pos: "CAM", age: 29, rating: 76, potential: 77, value: 3.2, inStarting11: true },
-                { name: "L. Andrade", pos: "RW", age: 30, rating: 74, potential: 74, value: 2.0, inStarting11: true },
-                { name: "A. Zoubir", pos: "LW", age: 32, rating: 76, potential: 76, value: 1.5, inStarting11: true },
-                { name: "Juninho", pos: "ST", age: 27, rating: 77, potential: 80, value: 5.0, inStarting11: true },
-                { name: "N. Axundzadə", pos: "ST", age: 20, rating: 72, potential: 82, value: 3.0, inStarting11: false },
-                { name: "T. Bayramov", pos: "RB", age: 23, rating: 72, potential: 80, value: 2.0, inStarting11: false }
+                { id: 1, name: "S. Mahammadaliyev", pos: "GK", age: 30, rating: 73, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 2, name: "M. Vesovic", pos: "RB", age: 32, rating: 73, goals: 0, assists: 0, value: 1.2, inStarting11: true },
+                { id: 3, name: "B. Mustafazade", pos: "CB", age: 27, rating: 74, goals: 0, assists: 0, value: 1.8, inStarting11: true },
+                { id: 4, name: "K. Medina", pos: "CB", age: 33, rating: 74, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 5, name: "E. Cəfərquliyev", pos: "LB", age: 23, rating: 73, goals: 0, assists: 0, value: 2.2, inStarting11: true },
+                { id: 6, name: "J. Romao", pos: "CDM", age: 26, rating: 75, goals: 0, assists: 0, value: 3.0, inStarting11: true },
+                { id: 7, name: "M. Jankovic", pos: "CM", age: 28, rating: 75, goals: 0, assists: 0, value: 2.5, inStarting11: true },
+                { id: 8, name: "Y. Benzia", pos: "CAM", age: 29, rating: 76, goals: 0, assists: 0, value: 3.2, inStarting11: true },
+                { id: 9, name: "L. Andrade", pos: "RW", age: 30, rating: 74, goals: 0, assists: 0, value: 2.0, inStarting11: true },
+                { id: 10, name: "A. Zoubir", pos: "LW", age: 32, rating: 76, goals: 0, assists: 0, value: 1.5, inStarting11: true },
+                { id: 11, name: "Juninho", pos: "ST", age: 27, rating: 77, goals: 0, assists: 0, value: 5.0, inStarting11: true },
+                { id: 12, name: "N. Axundzadə", pos: "ST", age: 20, rating: 72, goals: 0, assists: 0, value: 3.0, inStarting11: false }
               ]
             },
             { id: 102, name: "Neftçi", budget: 6, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
               squad: [
-                { name: "R. Cəfərov", pos: "GK", age: 21, rating: 70, potential: 78, value: 1.2, inStarting11: true },
-                { name: "E. Mahmudov", pos: "CM", age: 32, rating: 73, potential: 73, value: 1.0, inStarting11: true },
-                { name: "Y. Matias", pos: "CB", age: 29, rating: 72, potential: 73, value: 1.1, inStarting11: true },
-                { name: "M. Tamas", pos: "CB", age: 30, rating: 71, potential: 71, value: 0.9, inStarting11: true },
-                { name: "A. Brawn", pos: "LB", age: 26, rating: 70, potential: 72, value: 0.8, inStarting11: true },
-                { name: "K. Saief", pos: "LM", age: 30, rating: 71, potential: 71, value: 1.0, inStarting11: true },
-                { name: "E. Israfilov", pos: "CDM", age: 32, rating: 70, potential: 70, value: 0.7, inStarting11: true },
-                { name: "A. Eddy", pos: "RM", age: 28, rating: 69, potential: 70, value: 0.8, inStarting11: true },
-                { name: "R. Ozobic", pos: "CAM", age: 33, rating: 72, potential: 72, value: 0.9, inStarting11: true },
-                { name: "D. Lebon", pos: "RW", age: 26, rating: 70, potential: 72, value: 1.0, inStarting11: true },
-                { name: "A. Shinyashiki", pos: "ST", age: 27, rating: 72, potential: 74, value: 1.5, inStarting11: true }
+                { id: 13, name: "R. Cəfərov", pos: "GK", age: 21, rating: 70, goals: 0, assists: 0, value: 1.2, inStarting11: true },
+                { id: 14, name: "E. Mahmudov", pos: "CM", age: 32, rating: 73, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 15, name: "Y. Matias", pos: "CB", age: 29, rating: 72, goals: 0, assists: 0, value: 1.1, inStarting11: true },
+                { id: 16, name: "M. Tamas", pos: "CB", age: 30, rating: 71, goals: 0, assists: 0, value: 0.9, inStarting11: true },
+                { id: 17, name: "A. Brawn", pos: "LB", age: 26, rating: 70, goals: 0, assists: 0, value: 0.8, inStarting11: true },
+                { id: 18, name: "K. Saief", pos: "LM", age: 30, rating: 71, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 19, name: "E. Israfilov", pos: "CDM", age: 32, rating: 70, goals: 0, assists: 0, value: 0.7, inStarting11: true },
+                { id: 20, name: "A. Eddy", pos: "RM", age: 28, rating: 69, goals: 0, assists: 0, value: 0.8, inStarting11: true },
+                { id: 21, name: "R. Ozobic", pos: "CAM", age: 33, rating: 72, goals: 0, assists: 0, value: 0.9, inStarting11: true },
+                { id: 22, name: "D. Lebon", pos: "RW", age: 26, rating: 70, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 23, name: "A. Shinyashiki", pos: "ST", age: 27, rating: 72, goals: 0, assists: 0, value: 1.5, inStarting11: true }
               ]
             }
           ]
         },
         {
-          id: "TR", name: "Türkiyə", rank: 9, league: "Süper Lig",
+          id: "TR", name: "Türkiyə", league: "Süper Lig",
           teams: [
             { id: 201, name: "Beşiktaş", budget: 30, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
               squad: [
-                { name: "M. Günok", pos: "GK", age: 35, rating: 77, potential: 77, value: 1.5, inStarting11: true },
-                { name: "J. Svensson", pos: "RB", age: 31, rating: 75, potential: 75, value: 2.0, inStarting11: true },
-                { name: "Gabriel Paulista", pos: "CB", age: 33, rating: 78, potential: 78, value: 2.5, inStarting11: true },
-                { name: "F. Uduokhai", pos: "CB", age: 26, rating: 76, potential: 79, value: 5.0, inStarting11: true },
-                { name: "A. Masuaku", pos: "LB", age: 30, rating: 76, potential: 76, value: 3.0, inStarting11: true },
-                { name: "Al-Musrati", pos: "CDM", age: 28, rating: 78, potential: 80, value: 12.0, inStarting11: true },
-                { name: "Gedson Fernandes", pos: "CM", age: 25, rating: 80, potential: 85, value: 18.0, inStarting11: true },
-                { name: "Rafa Silva", pos: "CAM", age: 31, rating: 83, potential: 83, value: 14.0, inStarting11: true },
-                { name: "Milot Rashica", pos: "RW", age: 28, rating: 77, potential: 78, value: 7.5, inStarting11: true },
-                { name: "Semih Kılıçsoy", pos: "LW", age: 19, rating: 77, potential: 88, value: 20.0, inStarting11: true },
-                { name: "Ciro Immobile", pos: "ST", age: 34, rating: 81, potential: 81, value: 6.0, inStarting11: true }
+                { id: 24, name: "M. Günok", pos: "GK", age: 35, rating: 77, goals: 0, assists: 0, value: 1.5, inStarting11: true },
+                { id: 25, name: "J. Svensson", pos: "RB", age: 31, rating: 75, goals: 0, assists: 0, value: 2.0, inStarting11: true },
+                { id: 26, name: "G. Paulista", pos: "CB", age: 33, rating: 78, goals: 0, assists: 0, value: 2.5, inStarting11: true },
+                { id: 27, name: "F. Uduokhai", pos: "CB", age: 26, rating: 76, goals: 0, assists: 0, value: 5.0, inStarting11: true },
+                { id: 28, name: "A. Masuaku", pos: "LB", age: 30, rating: 76, goals: 0, assists: 0, value: 3.0, inStarting11: true },
+                { id: 29, name: "Al-Musrati", pos: "CDM", age: 28, rating: 78, goals: 0, assists: 0, value: 12.0, inStarting11: true },
+                { id: 30, name: "Gedson Fernandes", pos: "CM", age: 25, rating: 80, goals: 0, assists: 0, value: 18.0, inStarting11: true },
+                { id: 31, name: "Rafa Silva", pos: "CAM", age: 31, rating: 83, goals: 0, assists: 0, value: 14.0, inStarting11: true },
+                { id: 32, name: "M. Rashica", pos: "RW", age: 28, rating: 77, goals: 0, assists: 0, value: 7.5, inStarting11: true },
+                { id: 33, name: "Semih Kılıçsoy", pos: "LW", age: 19, rating: 77, goals: 0, assists: 0, value: 20.0, inStarting11: true },
+                { id: 34, name: "C. Immobile", pos: "ST", age: 34, rating: 81, goals: 0, assists: 0, value: 6.0, inStarting11: true }
               ]
             },
             { id: 202, name: "Galatasaray", budget: 45, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
               squad: [
-                { name: "F. Muslera", pos: "GK", age: 38, rating: 80, potential: 80, value: 1.0, inStarting11: true },
-                { name: "K. Ayhan", pos: "RB", age: 29, rating: 76, potential: 76, value: 4.5, inStarting11: true },
-                { name: "D. Sanchez", pos: "CB", age: 28, rating: 80, potential: 82, value: 18.0, inStarting11: true },
-                { name: "A. Bardakcı", pos: "CB", age: 29, rating: 78, potential: 78, value: 8.5, inStarting11: true },
-                { name: "I. Jakobs", pos: "LB", age: 25, rating: 75, potential: 78, value: 6.0, inStarting11: true },
-                { name: "L. Torreira", pos: "CDM", age: 28, rating: 82, potential: 83, value: 15.0, inStarting11: true },
-                { name: "Gabriel Sara", pos: "CM", age: 25, rating: 79, potential: 83, value: 18.0, inStarting11: true },
-                { name: "Dries Mertens", pos: "CAM", age: 37, rating: 80, potential: 80, value: 2.0, inStarting11: true },
-                { name: "B. A. Yılmaz", pos: "RW", age: 24, rating: 80, potential: 85, value: 21.0, inStarting11: true },
-                { name: "Yun. Akgün", pos: "LW", age: 24, rating: 76, potential: 80, value: 6.5, inStarting11: true },
-                { name: "V. Osimhen", pos: "ST", age: 25, rating: 87, potential: 91, value: 75.0, inStarting11: true }
+                { id: 35, name: "F. Muslera", pos: "GK", age: 38, rating: 80, goals: 0, assists: 0, value: 1.0, inStarting11: true },
+                { id: 36, name: "K. Ayhan", pos: "RB", age: 29, rating: 76, goals: 0, assists: 0, value: 4.5, inStarting11: true },
+                { id: 37, name: "D. Sanchez", pos: "CB", age: 28, rating: 80, goals: 0, assists: 0, value: 18.0, inStarting11: true },
+                { id: 38, name: "A. Bardakcı", pos: "CB", age: 29, rating: 78, goals: 0, assists: 0, value: 8.5, inStarting11: true },
+                { id: 39, name: "I. Jakobs", pos: "LB", age: 25, rating: 75, goals: 0, assists: 0, value: 6.0, inStarting11: true },
+                { id: 40, name: "L. Torreira", pos: "CDM", age: 28, rating: 82, goals: 0, assists: 0, value: 15.0, inStarting11: true },
+                { id: 41, name: "G. Sara", pos: "CM", age: 25, rating: 79, goals: 0, assists: 0, value: 18.0, inStarting11: true },
+                { id: 42, name: "D. Mertens", pos: "CAM", age: 37, rating: 80, goals: 0, assists: 0, value: 2.0, inStarting11: true },
+                { id: 43, name: "B. A. Yılmaz", pos: "RW", age: 24, rating: 80, goals: 0, assists: 0, value: 21.0, inStarting11: true },
+                { id: 44, name: "Y. Akgün", pos: "LW", age: 24, rating: 76, goals: 0, assists: 0, value: 6.5, inStarting11: true },
+                { id: 45, name: "V. Osimhen", pos: "ST", age: 25, rating: 87, goals: 0, assists: 0, value: 75.0, inStarting11: true }
               ]
             }
           ]
         },
         {
-          id: "ENG", name: "İngiltərə", rank: 1, league: "Premier League",
+          id: "ENG", name: "İngiltərə", league: "Premier League",
           teams: [
             { id: 301, name: "Arsenal", budget: 110, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
               squad: [
-                { name: "D. Raya", pos: "GK", age: 28, rating: 84, potential: 86, value: 35.0, inStarting11: true },
-                { name: "B. White", pos: "RB", age: 26, rating: 83, potential: 85, value: 50.0, inStarting11: true },
-                { name: "W. Saliba", pos: "CB", age: 23, rating: 87, potential: 92, value: 80.0, inStarting11: true },
-                { name: "G. Magalhaes", pos: "CB", age: 26, rating: 86, potential: 88, value: 65.0, inStarting11: true },
-                { name: "J. Timber", pos: "LB", age: 23, rating: 80, potential: 85, value: 38.0, inStarting11: true },
-                { name: "T. Partey", pos: "CDM", age: 31, rating: 82, potential: 82, value: 18.0, inStarting11: true },
-                { name: "D. Rice", pos: "CM", age: 25, rating: 87, potential: 90, value: 100.0, inStarting11: true },
-                { name: "M. Odegaard", pos: "CAM", age: 25, rating: 88, potential: 90, value: 110.0, inStarting11: true },
-                { name: "B. Saka", pos: "RW", age: 22, rating: 88, potential: 93, value: 130.0, inStarting11: true },
-                { name: "G. Martinelli", pos: "LW", age: 23, rating: 83, potential: 88, value: 60.0, inStarting11: true },
-                { name: "K. Havertz", pos: "ST", age: 25, rating: 83, potential: 86, value: 55.0, inStarting11: true },
-                { name: "E. Nwaneri", pos: "CAM", age: 17, rating: 72, potential: 88, value: 12.0, inStarting11: false },
-                { name: "L. Trossard", pos: "LW", age: 29, rating: 82, potential: 82, value: 30.0, inStarting11: false }
-              ]
-            },
-            { id: 302, name: "Man. City", budget: 140, points: 0, played: 0, won: 0, drawn: 0, lost: 0,
-              squad: [
-                { name: "Ederson", pos: "GK", age: 30, rating: 87, potential: 88, value: 40.0, inStarting11: true },
-                { name: "K. Walker", pos: "RB", age: 34, rating: 83, potential: 83, value: 12.0, inStarting11: true },
-                { name: "R. Dias", pos: "CB", age: 27, rating: 88, potential: 90, value: 80.0, inStarting11: true },
-                { name: "M. Akanji", pos: "CB", age: 29, rating: 83, potential: 84, value: 42.0, inStarting11: true },
-                { name: "J. Gvardiol", pos: "LB", age: 22, rating: 84, potential: 90, value: 75.0, inStarting11: true },
-                { name: "Rodri", pos: "CDM", age: 28, rating: 91, potential: 92, value: 130.0, inStarting11: true },
-                { name: "K. De Bruyne", pos: "CM", age: 33, rating: 90, potential: 90, value: 45.0, inStarting11: true },
-                { name: "B. Silva", pos: "CAM", age: 29, rating: 87, potential: 87, value: 70.0, inStarting11: true },
-                { name: "P. Foden", pos: "RW", age: 24, rating: 88, potential: 92, value: 120.0, inStarting11: true },
-                { name: "J. Doku", pos: "LW", age: 22, rating: 80, potential: 86, value: 50.0, inStarting11: true },
-                { name: "E. Haaland", pos: "ST", age: 24, rating: 91, potential: 94, value: 180.0, inStarting11: true }
+                { id: 46, name: "D. Raya", pos: "GK", age: 28, rating: 84, goals: 0, assists: 0, value: 35.0, inStarting11: true },
+                { id: 47, name: "B. White", pos: "RB", age: 26, rating: 83, goals: 0, assists: 0, value: 50.0, inStarting11: true },
+                { id: 48, name: "W. Saliba", pos: "CB", age: 23, rating: 87, goals: 0, assists: 0, value: 80.0, inStarting11: true },
+                { id: 49, name: "G. Magalhaes", pos: "CB", age: 26, rating: 86, goals: 0, assists: 0, value: 65.0, inStarting11: true },
+                { id: 50, name: "J. Timber", pos: "LB", age: 23, rating: 80, goals: 0, assists: 0, value: 38.0, inStarting11: true },
+                { id: 51, name: "T. Partey", pos: "CDM", age: 31, rating: 82, goals: 0, assists: 0, value: 18.0, inStarting11: true },
+                { id: 52, name: "D. Rice", pos: "CM", age: 25, rating: 87, goals: 0, assists: 0, value: 100.0, inStarting11: true },
+                { id: 53, name: "M. Odegaard", pos: "CAM", age: 25, rating: 88, goals: 0, assists: 0, value: 110.0, inStarting11: true },
+                { id: 54, name: "B. Saka", pos: "RW", age: 22, rating: 88, goals: 0, assists: 0, value: 130.0, inStarting11: true },
+                { id: 55, name: "G. Martinelli", pos: "LW", age: 23, rating: 83, goals: 0, assists: 0, value: 60.0, inStarting11: true },
+                { id: 56, name: "K. Havertz", pos: "ST", age: 25, rating: 83, goals: 0, assists: 0, value: 55.0, inStarting11: true }
               ]
             }
           ]
@@ -254,6 +295,11 @@
 
     let userTeam = null;
     let userCountry = null;
+    let selectedPlayerForSwap = null;
+
+    function setTheme(themeName) {
+      document.body.className = themeName;
+    }
 
     function updateTeamDropdown() {
       const cId = document.getElementById("selectCountry").value;
@@ -279,19 +325,42 @@
       updateUI();
     }
 
-    function calculateTeamRating(team) {
-      const starting11 = team.squad.filter(p => p.inStarting11);
-      if (starting11.length === 0) return 60;
-      const sum = starting11.reduce((acc, p) => acc + p.rating, 0);
-      return Math.round(sum / starting11.length);
-    }
-
     function updateUI() {
       document.getElementById("userBudget").innerText = `$${userTeam.budget.toFixed(1)}M`;
       renderPitch();
       renderBench();
       renderMarket();
       renderStandings();
+      renderStats();
+    }
+
+    // SWAP (YER DƏYİŞMƏ) MƏNTİQİ
+    function handlePlayerClick(player) {
+      const statusEl = document.getElementById("swapStatus");
+
+      if (!selectedPlayerForSwap) {
+        selectedPlayerForSwap = player;
+        statusEl.innerText = `[${player.name}] seçildi. Dəyişmək üçün 2-ci oyunçunu seçin.`;
+        renderPitch();
+      } else {
+        if (selectedPlayerForSwap.id === player.id) {
+          selectedPlayerForSwap = null;
+          statusEl.innerText = "";
+          renderPitch();
+          return;
+        }
+
+        // Yerlərini/Statuslarını swap edirik
+        let temp11 = selectedPlayerForSwap.inStarting11;
+        selectedPlayerForSwap.inStarting11 = player.inStarting11;
+        player.inStarting11 = temp11;
+
+        selectedPlayerForSwap = null;
+        statusEl.innerText = "Yerlər dəyişdirildi!";
+        setTimeout(() => statusEl.innerText = "", 2000);
+
+        updateUI();
+      }
     }
 
     function renderPitch() {
@@ -299,7 +368,7 @@
       pitch.innerHTML = "";
 
       const starting11 = userTeam.squad.filter(p => p.inStarting11);
-      
+
       const rowFW = document.createElement("div"); rowFW.className = "pitch-row";
       const rowMF = document.createElement("div"); rowMF.className = "pitch-row";
       const rowDF = document.createElement("div"); rowDF.className = "pitch-row";
@@ -307,17 +376,14 @@
 
       starting11.forEach(p => {
         const card = document.createElement("div");
-        card.className = "player-card";
+        const isSelected = selectedPlayerForSwap && selectedPlayerForSwap.id === p.id ? "selected" : "";
+        card.className = `player-card ${isSelected}`;
         card.innerHTML = `<b>${p.name}</b><br>${p.pos} | ${p.rating}`;
-        card.title = "Ehtiyatlara keçirmək üçün klikləyin";
-        card.onclick = () => {
-          p.inStarting11 = false;
-          updateUI();
-        };
+        card.onclick = () => handlePlayerClick(p);
 
-        if(["ST", "LW", "RW", "CF"].includes(p.pos)) rowFW.appendChild(card);
-        else if(["CAM", "CM", "CDM", "LM", "RM"].includes(p.pos)) rowMF.appendChild(card);
-        else if(p.pos === "GK") rowGK.appendChild(card);
+        if (["ST", "LW", "RW", "CF"].includes(p.pos)) rowFW.appendChild(card);
+        else if (["CAM", "CM", "CDM", "LM", "RM"].includes(p.pos)) rowMF.appendChild(card);
+        else if (p.pos === "GK") rowGK.appendChild(card);
         else rowDF.appendChild(card);
       });
 
@@ -333,28 +399,18 @@
       const bench = userTeam.squad.filter(p => !p.inStarting11);
 
       bench.forEach(p => {
+        const isSelected = selectedPlayerForSwap && selectedPlayerForSwap.id === p.id ? "style='background:rgba(255,23,68,0.2)'" : "";
         tbody.innerHTML += `
-          <tr>
+          <tr ${isSelected}>
             <td><b>${p.name}</b></td>
             <td>${p.pos}</td>
-            <td>${p.age}</td>
             <td>${p.rating}</td>
-            <td style="color: var(--accent);">${p.potential}</td>
-            <td><button class="btn" onclick="moveToStarting11('${p.name}')">11-liyə sal</button></td>
+            <td>${p.goals}</td>
+            <td>${p.assists}</td>
+            <td><button class="btn" onclick="handlePlayerClick(userTeam.squad.find(x => x.id === ${p.id}))">Seç/Dəyiş</button></td>
           </tr>
         `;
       });
-    }
-
-    function moveToStarting11(playerName) {
-      const current11Count = userTeam.squad.filter(p => p.inStarting11).length;
-      if (current11Count >= 11) {
-        alert("Əsas heyətdə artıq 11 oyunçu var! Öncə sahədən bir oyunçu çıxarın.");
-        return;
-      }
-      const player = userTeam.squad.find(p => p.name === playerName);
-      player.inStarting11 = true;
-      updateUI();
     }
 
     function renderMarket() {
@@ -385,8 +441,7 @@
       const input = document.getElementById("searchInput").value.toLowerCase();
       const rows = document.querySelectorAll(".market-row");
       rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(input) ? "" : "none";
+        row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
       });
     }
 
@@ -394,7 +449,7 @@
       let seller = null;
       db.countries.forEach(c => {
         const found = c.teams.find(t => t.id === teamId);
-        if(found) seller = found;
+        if (found) seller = found;
       });
 
       const p = seller.squad[pIdx];
@@ -408,40 +463,33 @@
       userTeam.squad.push(p);
       seller.squad.splice(pIdx, 1);
 
-      alert(`${p.name} heyətinizə transfer edildi!`);
+      alert(`${p.name} komandanıza qoşuldu!`);
       updateUI();
     }
 
-    // REALİSTİK GƏNC İNKİŞAF ALQORİTMİ (Balanslaşdırılmış)
-    function growPlayers() {
-      userTeam.squad.forEach(p => {
-        if (p.age < 23 && p.rating < p.potential) {
-          if (Math.random() < 0.2) p.rating += 1; // 20% ehtimalla çox yavaş artır
-        } else if (p.age > 33) {
-          if (Math.random() < 0.25) p.rating -= 1;
-        }
-      });
-    }
-
-    // QOL VURANLAR İLƏ DETALLI MATÇ SİMULYASİYASI
+    // REAL MATÇ SİMULYASİYASI VƏ QOL/ASİST STATİSTİKASI
     function simulateMatch(home, away) {
-      const homePower = calculateTeamRating(home) + 3;
-      const awayPower = calculateTeamRating(away);
+      const hRating = calculateTeamRating(home);
+      const aRating = calculateTeamRating(away);
       let hG = 0, aG = 0;
-      let scorers = [];
+      let matchLog = [];
 
-      for (let i = 0; i < 6; i++) {
-        if (Math.random() * 100 < (homePower / (homePower + awayPower)) * 40) {
+      for (let i = 0; i < 5; i++) {
+        if (Math.random() * 100 < (hRating / (hRating + aRating)) * 40) {
           hG++;
-          const homeAttackers = home.squad.filter(p => p.inStarting11);
-          const scorer = homeAttackers[Math.floor(Math.random() * homeAttackers.length)]?.name || "Oyunçu";
-          scorers.push(`${home.name}: ${scorer} (${Math.floor(Math.random()*85)+1}')`);
+          const scorer = getRandomPlayer(home);
+          const assister = getRandomPlayer(home, scorer?.id);
+          if (scorer) scorer.goals++;
+          if (assister) assister.assists++;
+          matchLog.push(`${home.name}: ${scorer?.name || 'Oyunçu'} ⚽ (${assister ? 'Asist: ' + assister.name : 'Solo'})`);
         }
-        if (Math.random() * 100 < (awayPower / (homePower + awayPower)) * 35) {
+        if (Math.random() * 100 < (aRating / (hRating + aRating)) * 35) {
           aG++;
-          const awayAttackers = away.squad.filter(p => p.inStarting11);
-          const scorer = awayAttackers[Math.floor(Math.random() * awayAttackers.length)]?.name || "Oyunçu";
-          scorers.push(`${away.name}: ${scorer} (${Math.floor(Math.random()*85)+1}')`);
+          const scorer = getRandomPlayer(away);
+          const assister = getRandomPlayer(away, scorer?.id);
+          if (scorer) scorer.goals++;
+          if (assister) assister.assists++;
+          matchLog.push(`${away.name}: ${scorer?.name || 'Oyunçu'} ⚽ (${assister ? 'Asist: ' + assister.name : 'Solo'})`);
         }
       }
 
@@ -450,26 +498,75 @@
       else if (aG > hG) { away.points += 3; away.won++; home.lost++; }
       else { home.points += 1; away.points += 1; home.drawn++; away.drawn++; }
 
-      return { home: home.name, away: away.name, score: `${hG} - ${aG}`, scorers };
+      return { home: home.name, away: away.name, score: `${hG} - ${aG}`, log: matchLog };
+    }
+
+    function calculateTeamRating(team) {
+      const active = team.squad.filter(p => p.inStarting11);
+      if (active.length === 0) return 60;
+      return Math.round(active.reduce((acc, p) => acc + p.rating, 0) / active.length);
+    }
+
+    function getRandomPlayer(team, excludeId = null) {
+      const active = team.squad.filter(p => p.inStarting11 && p.id !== excludeId);
+      if (active.length === 0) return null;
+      return active[Math.floor(Math.random() * active.length)];
     }
 
     function playNextRound() {
-      growPlayers();
       const resultsDiv = document.getElementById("matchResults");
       resultsDiv.innerHTML = "";
 
       db.countries.forEach(c => {
         if (c.teams.length >= 2) {
           const res = simulateMatch(c.teams[0], c.teams[1]);
-          let goalsText = res.scorers.length > 0 ? `<br><small style="color:#8d99ae;">⚽ ${res.scorers.join(", ")}</small>` : "";
+          let logHtml = res.log.length > 0 ? `<br><small style="color:var(--text-dim);">${res.log.join("<br>")}</small>` : "";
           resultsDiv.innerHTML += `
-            <div style="background:#0b132b; padding:8px; border-radius:6px;">
-              <b>[${c.name}]</b> ${res.home} <b>${res.score}</b> ${res.away} ${goalsText}
+            <div style="background:rgba(0,0,0,0.4); padding:8px; border-radius:6px; border-left:3px solid var(--accent);">
+              <b>[${c.name}]</b> ${res.home} <b>${res.score}</b> ${res.away} ${logHtml}
             </div>
           `;
         }
       });
 
+      checkJobOffers();
+      updateUI();
+    }
+
+    // DİGƏR KLUBURDAN İŞ/MƏŞQÇİ TƏKLİFLƏRİ
+    function checkJobOffers() {
+      if (userTeam.points >= 6 && Math.random() < 0.3) {
+        const offerPanel = document.getElementById("offerPanel");
+        const offerContent = document.getElementById("offerContent");
+
+        // Başqa ölkədən klub tapırıq
+        let otherTeams = [];
+        db.countries.forEach(c => {
+          c.teams.forEach(t => { if(t.id !== userTeam.id) otherTeams.push(t); });
+        });
+
+        const randomTeam = otherTeams[Math.floor(Math.random() * otherTeams.length)];
+        offerPanel.style.display = "block";
+        offerContent.innerHTML = `
+          <div class="offer-card">
+            <h4><b>${randomTeam.name}</b> klubundan Baş Məşqçi təklifi!</h4>
+            <p style="font-size:0.8rem; margin: 5px 0;">Uğurlu nəticələrinizə görə bu klub sizi komandanın sükanı arxasına dəvət edir.</p>
+            <button class="btn" onclick="acceptOffer(${randomTeam.id})">Təklifi Qəbul Et</button>
+          </div>
+        `;
+      }
+    }
+
+    function acceptOffer(teamId) {
+      db.countries.forEach(c => {
+        const found = c.teams.find(t => t.id === teamId);
+        if (found) {
+          userTeam = found;
+          userCountry = c;
+        }
+      });
+      document.getElementById("offerPanel").style.display = "none";
+      alert(`Təbriklər! Artıq ${userTeam.name} klubunu idarə edirsiniz.`);
       updateUI();
     }
 
@@ -478,7 +575,7 @@
       const sorted = [...userCountry.teams].sort((a,b) => b.points - a.points);
       tbody.innerHTML = "";
       sorted.forEach((t, i) => {
-        const isUser = t.id === userTeam.id ? "style='background: #1c2541; font-weight:bold; color:var(--accent);'" : "";
+        const isUser = t.id === userTeam.id ? "style='background: rgba(0,242,254,0.15); font-weight:bold; color:var(--accent);'" : "";
         tbody.innerHTML += `
           <tr ${isUser}>
             <td>${i+1}</td>
@@ -491,6 +588,20 @@
           </tr>
         `;
       });
+    }
+
+    function renderStats() {
+      let allPlayers = [];
+      db.countries.forEach(c => c.teams.forEach(t => t.squad.forEach(p => allPlayers.push({ ...p, team: t.name }))));
+
+      const scorers = [...allPlayers].sort((a,b) => b.goals - a.goals).slice(0, 5);
+      const assists = [...allPlayers].sort((a,b) => b.assists - a.assists).slice(0, 5);
+
+      const scorersTbody = document.getElementById("topScorersTable");
+      const assistsTbody = document.getElementById("topAssistsTable");
+
+      scorersTbody.innerHTML = scorers.map(p => `<tr><td>${p.name} (${p.team})</td><td><b>${p.goals} ⚽</b></td></tr>`).join('');
+      assistsTbody.innerHTML = assists.map(p => `<tr><td>${p.name} (${p.team})</td><td><b>${p.assists} 👟</b></td></tr>`).join('');
     }
 
     updateTeamDropdown();
