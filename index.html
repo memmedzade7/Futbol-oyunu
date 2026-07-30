@@ -1,1 +1,358 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Football Manager - European Edition</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --panel-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--panel-bg);
+    }
+
+    header h1 {
+      color: var(--accent);
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      color: var(--accent);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      background-color: var(--accent);
+      color: #000;
+      border: none;
+      padding: 10px 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-large {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #334155;
+    }
+
+    th {
+      background-color: #0f172a;
+      color: #94a3b8;
+    }
+
+    .results-list {
+      max-height: 250px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .match-item {
+      background: #0f172a;
+      padding: 8px 12px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .badge {
+      background: #334155;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .badge-ucl { background: #1e3a8a; color: #93c5fd; }
+    .badge-uel { background: #7c2d12; color: #fdba74; }
+    .badge-uecl { background: #14532d; color: #86efac; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>⚽ AI Football Manager</h1>
+    <p>Liqalar və Avropa Kubokları Simulyatoru</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- SOL TƏRƏF: İdarəetmə və Nəticələr -->
+    <div class="left-col">
+      <button class="btn btn-large" onclick="playNextRound()">▶ Növbəti Tur və Avrokubokları Oyna</button>
+
+      <div class="panel" style="margin-bottom: 20px;">
+        <h2>Son Turun Matç Nəticələri</h2>
+        <div id="matchResults" class="results-list">
+          <p style="color: #64748b;">Hələ matç oynanılmayıb...</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>🏆 Avropa Turnirləri <span class="badge badge-ucl">UEFA</span></h2>
+        <div id="euroResults" class="results-list">
+          <p style="color: #64748b;">Avrokubok matçları liqa turlarından sonra keçirilir...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAĞ TƏRƏF: Liqa Cədvəlləri -->
+    <div class="right-col">
+      <div class="panel">
+        <h2>
+          <span>Liqa Cədvəli</span>
+          <select id="leagueSelect" onchange="renderStandings()" style="padding: 5px; border-radius: 4px; background: #0f172a; color: #fff; border: 1px solid #334155;">
+            <option value="AZ">Azərbaycan Premyer Liqası</option>
+            <option value="TR">Türkiyə Süper Lig</option>
+            <option value="ENG">İngiltərə Premier League</option>
+          </select>
+        </h2>
+        
+        <table id="standingsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Klub</th>
+              <th>O</th>
+              <th>Q</th>
+              <th>H</th>
+              <th>M</th>
+              <th>X</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Cədvəl JS ilə dolacaq -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- VERİLƏNLƏR BAZASI ---
+    const db = {
+      countries: [
+        {
+          id: "AZ",
+          name: "Azərbaycan",
+          teams: [
+            { id: 101, name: "Qarabağ", rating: 78, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 102, name: "Neftçi", rating: 72, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 103, name: "Sabah", rating: 74, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 104, name: "Zirə", rating: 70, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+          ]
+        },
+        {
+          id: "TR",
+          name: "Türkiyə",
+          teams: [
+            { id: 201, name: "Galatasaray", rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 202, name: "Fenerbahçe", rating: 81, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 203, name: "Beşiktaş", rating: 79, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 204, name: "Trabzonspor", rating: 75, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+          ]
+        },
+        {
+          id: "ENG",
+          name: "İngiltərə",
+          teams: [
+            { id: 301, name: "Man. City", rating: 88, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 302, name: "Arsenal", rating: 85, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 303, name: "Liverpool", rating: 86, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 },
+            { id: 304, name: "Chelsea", rating: 82, points: 0, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 }
+          ]
+        }
+      ]
+    };
+
+    // --- MATÇ SİMULYASİYA MÜHƏRRİKİ ---
+    function simulateMatch(home, away) {
+      const homePower = home.rating + 3; // Ev sahibi üstünlüyü
+      const awayPower = away.rating;
+
+      let homeGoals = 0;
+      let awayGoals = 0;
+
+      for (let i = 0; i < 7; i++) {
+        if (Math.random() * 100 < (homePower / (homePower + awayPower)) * 45) homeGoals++;
+        if (Math.random() * 100 < (awayPower / (homePower + awayPower)) * 40) awayGoals++;
+      }
+
+      // Statistikanı yenilə
+      home.played++; away.played++;
+      home.gf += homeGoals; home.ga += awayGoals;
+      away.gf += awayGoals; away.ga += homeGoals;
+
+      if (homeGoals > awayGoals) {
+        home.points += 3; home.won++; away.lost++;
+      } else if (awayGoals > homeGoals) {
+        away.points += 3; away.won++; home.lost++;
+      } else {
+        home.points += 1; away.points += 1;
+        home.drawn++; away.drawn++;
+      }
+
+      return { home: home.name, away: away.name, score: `${homeGoals} - ${awayGoals}` };
+    }
+
+    // --- OYUN MƏNTİQİ ---
+    function playNextRound() {
+      const matchResultsContainer = document.getElementById("matchResults");
+      const euroResultsContainer = document.getElementById("euroResults");
+      
+      matchResultsContainer.innerHTML = "";
+      euroResultsContainer.innerHTML = "";
+
+      // 1. Daxili Liqa Matçlarını Oyna
+      db.countries.forEach(country => {
+        const teams = country.teams;
+        // Sadə tütlaşdırma (1v2, 3v4)
+        const res1 = simulateMatch(teams[0], teams[1]);
+        const res2 = simulateMatch(teams[2], teams[3]);
+
+        matchResultsContainer.innerHTML += `
+          <div class="match-item">
+            <span><b>[${country.name}]</b> ${res1.home} - ${res1.away}</span>
+            <span class="score">${res1.score}</span>
+          </div>
+          <div class="match-item">
+            <span><b>[${country.name}]</b> ${res2.home} - ${res2.away}</span>
+            <span class="score">${res2.score}</span>
+          </div>
+        `;
+      });
+
+      // 2. Avrokubok Matçları (Çempionlar Liqası, Avropa Liqası, Konfrans Liqası)
+      const uclMatch = simulateMatch(db.countries[0].teams[0], db.countries[1].teams[0]); // Qarabağ vs Galatasaray (UCL)
+      const uelMatch = simulateMatch(db.countries[0].teams[1], db.countries[2].teams[1]); // Neftçi vs Arsenal (UEL)
+      const ueclMatch = simulateMatch(db.countries[1].teams[2], db.countries[2].teams[3]); // Beşiktaş vs Chelsea (UECL)
+
+      euroResultsContainer.innerHTML = `
+        <div class="match-item">
+          <span><span class="badge badge-ucl">UCL</span> ${uclMatch.home} - ${uclMatch.away}</span>
+          <span class="score">${uclMatch.score}</span>
+        </div>
+        <div class="match-item">
+          <span><span class="badge badge-uel">UEL</span> ${uelMatch.home} - ${uelMatch.away}</span>
+          <span class="score">${uelMatch.score}</span>
+        </div>
+        <div class="match-item">
+          <span><span class="badge badge-uecl">UECL</span> ${ueclMatch.home} - ${ueclMatch.away}</span>
+          <span class="score">${ueclMatch.score}</span>
+        </div>
+      `;
+
+      // Cədvəli yenilə
+      renderStandings();
+    }
+
+    // --- CƏDVƏLİ RENDER ETMƏK ---
+    function renderStandings() {
+      const selectedCountryId = document.getElementById("leagueSelect").value;
+      const country = db.countries.find(c => c.id === selectedCountryId);
+      const tbody = document.querySelector("#standingsTable tbody");
+
+      // Xala və top fərqinə görə sırala
+      const sortedTeams = [...country.teams].sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        return (b.gf - b.ga) - (a.gf - a.ga);
+      });
+
+      tbody.innerHTML = "";
+      sortedTeams.forEach((team, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td><b>${team.name}</b></td>
+            <td>${team.played}</td>
+            <td>${team.won}</td>
+            <td>${team.drawn}</td>
+            <td>${team.lost}</td>
+            <td><b>${team.points}</b></td>
+          </tr>
+        `;
+      });
+    }
+
+    // İlk açılışda cədvəli göstər
+    renderStandings();
+  </script>
+</body>
+</html>
